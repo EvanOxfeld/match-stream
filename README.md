@@ -12,7 +12,7 @@ $ npm install match-stream
 ## Quick Example
 
 ```javascript
-var MatchStream = require('../match');
+var MatchStream = require('match-stream');
 var streamBuffers = require("stream-buffers");
 
 var ms = new MatchStream({ pattern: 'World'}, function (buf, matched, extra) {

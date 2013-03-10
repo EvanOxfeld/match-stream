@@ -1,6 +1,6 @@
 var test = require('tap').test;
 var streamBuffers = require("stream-buffers");
-var MatchStream = require('../match');
+var MatchStream = require('../');
 
 test("pipe until pattern", function (t) {
   t.plan(2);
