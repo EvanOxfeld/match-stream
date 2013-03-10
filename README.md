@@ -9,7 +9,9 @@ Supply a function to handle pattern matches within a NodeJS stream.
 $ npm install match-stream
 ```
 
-## Quick Example
+## Quick Examples
+
+### End stream on match
 
 ```javascript
 var MatchStream = require('match-stream');
@@ -38,6 +40,29 @@ sourceStream
 
 //Output
 //Piped data before pattern occurs: 'Hello '
+```
+
+### Split stream
+
+```javascript
+var MatchStream = require('match-stream');
+var fs = require('fs');
+
+var line = "";
+var loremLines = [];
+var ms = new MatchStream({ pattern: '.', consume: true}, function (buf, matched, extra) {
+  line += buf.toString();
+  if (matched) {
+    loremLines.push(line.trim());
+    line = "";
+  }
+});
+
+fs.createReadStream('lorem.txt')
+  .pipe(ms)
+  .once('end', function() {
+    console.log(loremLines);
+  });
 ```
 
 ## License
