@@ -13,6 +13,7 @@ function Match(opts, matchFn) {
     return new Match(opts, matchFn);
   }
 
+  //todo - better handle opts e.g. pattern.length can't be > highWaterMark
   this._opts = opts;
   if (typeof this._opts.pattern === "string") {
     this._opts.pattern = new Buffer(this._opts.pattern);
@@ -20,7 +21,6 @@ function Match(opts, matchFn) {
   this._matchFn = matchFn;
   this._bufs = Buffers();
 
-  //todo pass along opts
   Transform.call(this);
 }
 
@@ -30,9 +30,9 @@ Match.prototype._transform = function (chunk, encoding, callback) {
 
   var index = this._bufs.indexOf(pattern);
   if (index >= 0) {
-    this._matchFn(this._bufs.slice(0, index), pattern);
+    this._matchFn(this._bufs.splice(0, index).toBuffer(), pattern, this._bufs.toBuffer());
   } else {
-    this._matchFn(this._bufs.slice(0, this._bufs.length - chunk.length), false);
+    this._matchFn(this._bufs.splice(0, this._bufs.length - chunk.length));
   }
   callback();
 };
