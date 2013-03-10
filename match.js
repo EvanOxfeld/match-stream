@@ -6,6 +6,10 @@ var Transform = require('stream').Transform;
 var inherits = require("util").inherits;
 var Buffers = require('buffers');
 
+if (!Transform) {
+  Transform = require('readable-stream/transform');
+}
+
 inherits(Match, Transform);
 
 function Match(opts, matchFn) {
