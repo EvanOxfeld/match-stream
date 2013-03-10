@@ -1,4 +1,4 @@
-match-stream
+match-stream [![Build Status](https://travis-ci.org/EvanOxfeld/match-stream.png)](https://travis-ci.org/EvanOxfeld/match-stream)
 ============
 
 Supply a function to handle pattern matches within a NodeJS stream.
