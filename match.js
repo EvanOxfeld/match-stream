@@ -34,9 +34,24 @@ Match.prototype._transform = function (chunk, encoding, callback) {
 
   var index = this._bufs.indexOf(pattern);
   if (index >= 0) {
-    this._matchFn(this._bufs.splice(0, index).toBuffer(), pattern, this._bufs.toBuffer());
+    processMatches.call(this, index, pattern, callback);
   } else {
     this._matchFn(this._bufs.splice(0, this._bufs.length - chunk.length));
+    callback();
   }
-  callback();
 };
+
+function processMatches(index, pattern, callback) {
+  var buf = this._bufs.splice(0, index).toBuffer();
+  if (this._opts.consume) {
+    this._bufs.splice(0, pattern.length);
+  }
+  this._matchFn(buf, pattern, this._bufs.toBuffer());
+
+  index = this._bufs.indexOf(pattern);
+  if (index > 0 || this._opts.consume && index === 0) {
+    process.nextTick(processMatches.bind(this, index, pattern, callback));
+  } else {
+    callback();
+  }
+}
