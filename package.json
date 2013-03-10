@@ -1,6 +1,6 @@
 {
   "name": "match-stream",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Match a pattern within a stream",
   "main": "match.js",
   "directories": {
