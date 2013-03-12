@@ -31,7 +31,7 @@ test("multiple matches within a single _transform() chunk", function (t) {
 
   fs.createReadStream(path.join(__dirname, '../examples/lorem.txt'))
     .pipe(ms)
-    .on('end', function() {
+    .on('finish', function() {
       t.deepEqual(loremLines, expected);
       t.end();
     });
@@ -56,7 +56,7 @@ test("multiple chunks passed to _transform()", function (t) {
 
   sourceStream
     .pipe(ms)
-    .on('end', function() {
+    .on('finish', function() {
       sourceStream.destroy();
       t.deepEqual(loremLines, expected);
       t.end();
