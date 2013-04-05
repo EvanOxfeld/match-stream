@@ -10,7 +10,7 @@ test("pipe until pattern", function (t) {
       return this.push(buf);
     }
     this.push(buf);
-    return this.push(null); //end the stream
+    this.end();
   }, function (extra) {
     t.equal(extra.toString(), 'World');
   });

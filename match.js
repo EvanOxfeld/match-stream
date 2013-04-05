@@ -28,7 +28,7 @@ function Match(opts, matchFn, callback) {
   var self = this;
   this._extra = Buffers();
   callback = callback || function() {};
-  this.once('end', function() {
+  this.once('finish', function() {
     callback(self._extra.toBuffer());
   });
 
