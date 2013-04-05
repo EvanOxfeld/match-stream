@@ -4,7 +4,7 @@ var path = require('path');
 
 var line = "";
 var loremLines = [];
-var ms = new MatchStream({ pattern: '.', consume: true}, function (buf, matched, extra) {
+var ms = new MatchStream({ pattern: '.', consume: true}, function (buf, matched) {
   line += buf.toString();
   if (matched) {
     loremLines.push(line.trim());

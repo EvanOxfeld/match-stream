@@ -12,7 +12,7 @@ if (!Transform) {
 
 inherits(Match, Transform);
 
-function Match(opts, matchFn) {
+function Match(opts, matchFn, callback) {
   if (!(this instanceof Match)) {
     return new Match(opts, matchFn);
   }
@@ -25,10 +25,22 @@ function Match(opts, matchFn) {
   this._matchFn = matchFn;
   this._bufs = Buffers();
 
+  var self = this;
+  this._extra = Buffers();
+  callback = callback || function() {};
+  this.once('end', function() {
+    callback(self._extra.toBuffer());
+  });
+
   Transform.call(this);
 }
 
 Match.prototype._transform = function (chunk, encoding, callback) {
+  if (this._readableState.ended) {
+    this._extra.push(chunk);
+    return callback();
+  }
+
   var pattern = this._opts.pattern;
   this._bufs.push(chunk);
 
@@ -49,7 +61,8 @@ function processMatches(index, pattern, callback) {
   if (this._opts.consume) {
     this._bufs.splice(0, pattern.length);
   }
-  this._matchFn(buf, pattern, this._bufs.toBuffer());
+  this._matchFn(buf, pattern);
+  this._extra = this._bufs;
 
   index = this._bufs.indexOf(pattern);
   if (index > 0 || this._opts.consume && index === 0) {

@@ -5,13 +5,14 @@ var MatchStream = require('../');
 test("pipe until pattern", function (t) {
   t.plan(2);
 
-  var ms = new MatchStream({ pattern: 'World'}, function (buf, matched, extra) {
+  var ms = new MatchStream({ pattern: 'World'}, function (buf, matched) {
     if (!matched) {
       return this.push(buf);
     }
     this.push(buf);
-    t.equal(extra.toString(), 'World');
     return this.push(null); //end the stream
+  }, function (extra) {
+    t.equal(extra.toString(), 'World');
   });
 
   var sourceStream = new streamBuffers.ReadableStreamBuffer();
