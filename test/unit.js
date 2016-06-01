@@ -25,10 +25,12 @@ test("matchFn callback test: has match, source stream arrives as one big chunk",
 });
 
 test("matchFn callback test: no match, source stream arrives as one big chunk", function (t) {
-  t.plan(1);
+  t.plan(4);
 
   var ms = new MatchStream({ pattern: '*'}, function (buf, matched, extra) {
-    t.fail('by design should not call matchFn callback');
+    t.equal(buf.toString(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit');
+    t.equal(matched, undefined);
+    t.equal(extra, undefined);
   });
 
   var sourceStream = new streamBuffers.ReadableStreamBuffer();
@@ -73,14 +75,14 @@ test("output stream test, output is empty: no match, source stream arrives as on
   var writableStream = new streamBuffers.WritableStreamBuffer();
 
   var ms = new MatchStream({ pattern: '*'}, function (buf, matched, extra) {
-    t.fail('by design should not call matchFn callback');
+    this.push(buf);
   });
 
   sourceStream
     .pipe(ms)
     .pipe(writableStream)
     .on('finish', function () {
-      t.equal(writableStream.getContents(), false);
+      t.equal(writableStream.getContents().toString(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit');
     });
   setImmediate(sourceStream.stop.bind(sourceStream));
 });
