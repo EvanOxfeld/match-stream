@@ -21,10 +21,10 @@ test("pipe until pattern", function (t) {
   sourceStream
     .pipe(ms)
     .pipe(writableStream)
-    .once('close', function () {
+    .once('finish', function () {
       var str = writableStream.getContentsAsString('utf8');
       t.equal(str, 'Hello ');
-      sourceStream.destroy();
       t.end();
     });
+  setImmediate(sourceStream.stop.bind(sourceStream));
 });

@@ -57,8 +57,8 @@ test("multiple chunks passed to _transform()", function (t) {
   sourceStream
     .pipe(ms)
     .on('finish', function() {
-      sourceStream.destroy();
       t.deepEqual(loremLines, expected);
       t.end();
     });
+  setImmediate(sourceStream.stop.bind(sourceStream));
 });

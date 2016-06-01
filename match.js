@@ -36,7 +36,8 @@ Match.prototype._transform = function (chunk, encoding, callback) {
   if (index >= 0) {
     processMatches.call(this, index, pattern, callback);
   } else {
-    var buf = this._bufs.splice(0, this._bufs.length - chunk.length);
+    var removeLen = this._bufs.length >= pattern.length ? this._bufs.length - pattern.length + 1: 0;
+    var buf = this._bufs.splice(0, removeLen);
     if (buf && buf.length > 0) {
       this._matchFn(buf.toBuffer());
     }

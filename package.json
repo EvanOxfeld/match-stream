@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "tap": "~0.4.0",
-    "stream-buffers": "~0.2.4"
+    "stream-buffers": "~3.0.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/tap ./test/*.js"
